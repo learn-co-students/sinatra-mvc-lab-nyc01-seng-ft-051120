@@ -1,42 +1,27 @@
-require 'pry'
 class PigLatinizer
-    attr_accessor :text
-    def initialize(text)
-        @text=text.downcase.strip
-    
-    end
-    def vowels
-        vowels=['a','e','i','o','u']
-    end
 
-    def one_word(text)
-        word=''
-        sur=''
-        text_array=text.strip.split("")
-        text_array.each do |ch|
-            if vowels.include?(ch)
-                
-                text_array.push(sur)
-                text_array.push("ay")
-           
-                break
-              
-            else sur= sur+text_array.shift
-            
-        end
+    def piglatinize(input_str)
+      input_str.split(" ").map{ |word| piglatinize_word(word)}.join(" ")
     end
-    text_array.join
-   
-   end
-
-   def more_words
-        words=[]
-        text_array=text.split
-        text_array.each do |word|
-            words << " #{one_word(word)}"
-        end
-        words.join
-      
+  
+    private
+  
+    def vowel?(char)
+      char.match(/[aAeEiIoOuU]/)
     end
-
-end
+  
+    def piglatinize_word(word)
+      # word starts with vowel
+      if vowel?(word[0])
+        word + "way"
+      else
+      # word starts with one or more consonants
+        vowel_index = word.index(/[aAeEiIoOuU]/)
+        consonants = word.slice(0..vowel_index-1)
+        word_leftover = word.slice(vowel_index..word.length)
+        word_leftover + consonants + "ay"
+      end
+    end
+  
+  end
+ 
